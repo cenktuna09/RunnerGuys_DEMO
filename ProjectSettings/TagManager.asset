@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - GM
+  - RotateObs
+  - RotateObsLeft
+  - RotateObsRight
+  - Donut
+  - RotatorStick
   layers:
   - Default
   - TransparentFX

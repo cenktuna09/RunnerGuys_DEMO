@@ -12,17 +12,19 @@ public class DynamicBlock : MonoBehaviour
     [SerializeField] float objectSpeed;
     int nextPosIndex;
     Transform nextPos;
+    private Vector3 movePos;
+
     // Start is called before the first frame update
     void Start()
     {
         nextPos = positions[0];
-        
+        blockRb = transform.gameObject.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void Update()
     {
-       
+        
     }
 
     private void FixedUpdate()
@@ -32,7 +34,7 @@ public class DynamicBlock : MonoBehaviour
 
     void MoveObject()
     {
-        if(transform.position == nextPos.position)
+        if(blockRb.position.x == nextPos.position.x)
         {
             nextPosIndex++;
             if (nextPosIndex >= positions.Length)
@@ -43,7 +45,8 @@ public class DynamicBlock : MonoBehaviour
         }
         else
         {
-            transform.position = Vector3.MoveTowards(transform.position, nextPos.position, objectSpeed * Time.deltaTime);
+             movePos = Vector3.MoveTowards(transform.position, nextPos.position, objectSpeed * Time.deltaTime);
+            blockRb.MovePosition(movePos);
         }
     }
 }

@@ -15,11 +15,18 @@ public class Player_Controller : MonoBehaviour
     Vector2 XandY;
     float speedX = 5f;
     float speedY = 10f;
+
+    private bool rotateObs;
+    private float maxRotateSpeed;
+    private bool rotateObsLeft;
+    private bool rotateObsRight;
+    private bool stickHit;
     // Start is called before the first frame update
     void Start()
     {
         speed = 7.5f;
-        Application.targetFrameRate = 144;
+        maxRotateSpeed = 5f;
+        Application.targetFrameRate = 120;
         rb = transform.gameObject.GetComponent<Rigidbody>();
     }
 
@@ -43,13 +50,17 @@ public class Player_Controller : MonoBehaviour
 
         if (isClick == true)
         {
+            //ANIM
             transform.GetComponent<Animator>().SetBool("Walk", true);
+            //ANIM
+
+            //MOUSE INPUT//
             mouseX += Input.GetAxis("Mouse X");
             mouseY += Input.GetAxis("Mouse Y");
+            //MOUSE INPUT
+
             move = new Vector3(mouseX, 0, mouseY).normalized;
 
-            XandY = new Vector2(mouseX, mouseY).normalized;
-            Debug.Log(new Vector3(mouseX, mouseY).normalized);
         }
         else
         {
@@ -74,6 +85,54 @@ public class Player_Controller : MonoBehaviour
             move = Vector3.zero;
         }
 
+        if(rotateObsLeft == true)
+        {
+
+            rb.AddForce(-10f, 0, 0);
+            rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxRotateSpeed);
+           
+        }
+        else
+        {
+
+        }
+        if(rotateObsRight == true)
+        {
+            rb.AddForce(10f, 0, 0);
+            rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxRotateSpeed);
+        }
+        else
+        {
+
+        }
+
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("RotateObsLeft"))
+        {
+            rotateObsLeft = true;
+        }
+
+        if (collision.gameObject.CompareTag("RotateObsRight"))
+        {
+            rotateObsRight = true;
+        }
+
+
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("RotateObsLeft"))
+        {
+            rotateObsLeft = false;
+        }
+        if (collision.gameObject.CompareTag("RotateObsRight"))
+        {
+            rotateObsRight = false;
+        }
     }
     IEnumerator PlayerMove()
     {
@@ -81,18 +140,19 @@ public class Player_Controller : MonoBehaviour
 
         while (true)
         {
-            //Debug.Log(move.normalized);
-
-
             rb.MovePosition(transform.position + move * speed * Time.fixedDeltaTime);
-          //transform.Translate(move * moveSpeed * Time.deltaTime, Space.World);
+          
             if (move != Vector3.zero)
 
                 transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(move), 5 * Time.deltaTime);
 
             yield return null;
         }
+
+        
     }
+
+    
     public void detectClick()
     {
         if(Input.GetMouseButtonDown(0))

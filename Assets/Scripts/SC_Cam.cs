@@ -11,27 +11,35 @@ public class SC_Cam : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
     GameObject player;
     private Rigidbody _body;
-
+    private Rigidbody camRb;
+    public float damping = 1;
     // Start is called before the first frame update
     void Start()
     {
-       
+        offset = transform.position - target.transform.position;
         player = GameObject.FindGameObjectWithTag("Player");
         _body = player.GetComponent<Rigidbody>();
+        camRb = transform.gameObject.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+       
+         
         Vector3 desiredPosition = _body.position + offset;
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothTime);
-        transform.position = smoothedPosition;
+        //Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothTime);
+        camRb.position = desiredPosition;
         // Define a target position above and behind the target transform
         //Vector3 targetPosition = target.TransformPoint(new Vector3(0, 5.51f, -4.16f));
         // Smoothly move the camera towards that target position
-        //transform.position = target.position + offset;
-        //transform.LookAt(target);
+        // transform.position = target.position + offset;
+        camRb.MovePosition(desiredPosition);
         // transform.position = new Vector3(player.transform.position.x, transform.position.y, player.transform.position.z-5.16f);
+        
+
+
+       
     }
 
     void OnTriggerEnter(Collider other)
