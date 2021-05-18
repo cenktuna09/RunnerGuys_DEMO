@@ -10,6 +10,8 @@ TagManager:
   - RotateObsRight
   - Donut
   - RotatorStick
+  - Finishline
+  - Obs
   layers:
   - Default
   - TransparentFX

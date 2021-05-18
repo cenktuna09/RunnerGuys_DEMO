@@ -8,7 +8,8 @@ public class Player_Controller : MonoBehaviour
     private Rigidbody rb;
     private float speed;
     private Vector2 mousePos;
-
+    Vector3 respawnPoint;
+    Camera mainCam;
     Vector3 move;
     float mouseX;
     float mouseY;
@@ -21,13 +22,18 @@ public class Player_Controller : MonoBehaviour
     private bool rotateObsLeft;
     private bool rotateObsRight;
     private bool stickHit;
+    private Animator animator;
     // Start is called before the first frame update
     void Start()
     {
+        UnityEditor.AI.NavMeshBuilder.BuildNavMesh();
+        transform.position = respawnPoint;
+        mainCam = Camera.main;
         speed = 7.5f;
         maxRotateSpeed = 5f;
         Application.targetFrameRate = 120;
         rb = transform.gameObject.GetComponent<Rigidbody>();
+        animator = transform.gameObject.GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -51,7 +57,10 @@ public class Player_Controller : MonoBehaviour
         if (isClick == true)
         {
             //ANIM
-            transform.GetComponent<Animator>().SetBool("Walk", true);
+            if (move != Vector3.zero)
+            {
+                animator.SetBool("Walk", true);
+            } 
             //ANIM
 
             //MOUSE INPUT//
@@ -64,7 +73,7 @@ public class Player_Controller : MonoBehaviour
         }
         else
         {
-            transform.GetComponent<Animator>().SetBool("Walk", false);
+            animator.SetBool("Walk", false);
             mouseX = 0;
             mouseY = 0;
         }
@@ -120,6 +129,8 @@ public class Player_Controller : MonoBehaviour
             rotateObsRight = true;
         }
 
+       
+
 
     }
 
@@ -132,6 +143,26 @@ public class Player_Controller : MonoBehaviour
         if (collision.gameObject.CompareTag("RotateObsRight"))
         {
             rotateObsRight = false;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("Finishline"))
+        {
+            transform.gameObject.GetComponent<Player_Controller>().enabled = false;
+            move = Vector3.zero;
+            animator.SetBool("Walk", false);
+
+        }
+
+        if (other.gameObject.CompareTag("Obs"))
+        {
+
+            mainCam.transform.position = new Vector3(respawnPoint.x, mainCam.transform.position.y, respawnPoint.z - 10f);
+            transform.position = respawnPoint;
+            move = Vector3.zero;
+
         }
     }
     IEnumerator PlayerMove()
