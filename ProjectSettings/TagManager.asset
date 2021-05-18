@@ -12,6 +12,7 @@ TagManager:
   - RotatorStick
   - Finishline
   - Obs
+  - Paintable
   layers:
   - Default
   - TransparentFX

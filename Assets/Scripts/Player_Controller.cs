@@ -31,7 +31,7 @@ public class Player_Controller : MonoBehaviour
         mainCam = Camera.main;
         speed = 7.5f;
         maxRotateSpeed = 5f;
-        Application.targetFrameRate = 120;
+        Application.targetFrameRate = 60;
         rb = transform.gameObject.GetComponent<Rigidbody>();
         animator = transform.gameObject.GetComponent<Animator>();
     }
@@ -153,6 +153,10 @@ public class Player_Controller : MonoBehaviour
             transform.gameObject.GetComponent<Player_Controller>().enabled = false;
             move = Vector3.zero;
             animator.SetBool("Walk", false);
+            // other.transform.GetChild(0).GetComponent<Paintable>().enabled = true;
+            var paintable = GameObject.Find("Brush");
+            paintable.gameObject.GetComponent<BoxCollider>().enabled = true;
+            paintable.gameObject.GetComponent<PaintObject>().enabled = true;
 
         }
 
