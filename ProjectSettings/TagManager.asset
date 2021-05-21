@@ -13,6 +13,12 @@ TagManager:
   - Finishline
   - Obs
   - Paintable
+  - FallCollider
+  - Enemy
+  - Wall
+  - Canvas
+  - Brush
+  - Door
   layers:
   - Default
   - TransparentFX

@@ -111,8 +111,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.21887414, y: 0.23674674, z: 2.1625285}
-  m_Center: {x: -0.03501811, y: -0.27276215, z: 1.5533558}
+  m_Size: {x: 0.29992488, y: 0.29288104, z: 2.027527}
+  m_Center: {x: -0.07373364, y: -0.24469501, z: 1.4858556}
 --- !u!114 &100929679960219529
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,11 +135,11 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 0.325, y: 0.23, z: 1.515}
-  m_MoveThreshold: 0.1
+  m_Extents: {x: 0.115, y: 0.17, z: 1.47}
+  m_MoveThreshold: 0.01
   m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: 0.06, y: -0.36, z: 1.17}
+  m_CarveOnlyStationary: 0
+  m_Center: {x: 0, y: -0.34, z: 1}
   m_TimeToStationary: 0.5
 --- !u!65 &100929680176889867
 BoxCollider:
@@ -153,7 +153,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.82042253, y: 0.4157107, z: 0.9710757}
-  m_Center: {x: 0.046463434, y: 0.10134235, z: -0.07608416}
+  m_Center: {x: -0.04, y: 0.10134235, z: 0.15}
 --- !u!1001 &100929679243343598
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -168,23 +168,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 659144ecb096e4649a92a7ab08ec4e55,
         type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.2206
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 659144ecb096e4649a92a7ab08ec4e55,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.2206
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 659144ecb096e4649a92a7ab08ec4e55,
+        type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.83615
+      value: 1.0206047
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 659144ecb096e4649a92a7ab08ec4e55,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.041
+      value: -0.051252
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 659144ecb096e4649a92a7ab08ec4e55,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.278
+      value: -0.30036
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 659144ecb096e4649a92a7ab08ec4e55,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.06
+      value: -0.12467
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 659144ecb096e4649a92a7ab08ec4e55,
         type: 3}

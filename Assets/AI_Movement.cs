@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 public class AI_Movement : MonoBehaviour
 {
@@ -11,20 +9,22 @@ public class AI_Movement : MonoBehaviour
     private bool isPhysical;
     private float knockbackCooldown = 0f;
     private float knockbackTime = 1f;
-
+    private Animator animator;
     // Start is called before the first frame update
     void Start()
     {
+        animator = transform.gameObject.GetComponent<Animator>();
         playerRb = GetComponent<Rigidbody>();
         respawnPoint = transform.position;   //new Vector3(transform.position.x, transform.position.y, transform.position.z);
         playerAgent = GetComponent<NavMeshAgent>();
-        playerAgent.destination = finalDestination.position;
+        playerAgent.SetDestination(finalDestination.position);
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        
         if (isPhysical == true)
         {
             playerAgent.enabled = false;
@@ -33,20 +33,20 @@ public class AI_Movement : MonoBehaviour
             knockbackCooldown += Time.deltaTime;
             if (knockbackCooldown > knockbackTime)
             {
-                Debug.Log("olduvePHYSICCC");
+                
                 playerAgent.enabled = true;
                 GetComponent<Rigidbody>().isKinematic = true;
-                playerAgent.destination = finalDestination.position;
+
                 if(playerAgent.isOnNavMesh == false)
                 {
-                    transform.position = respawnPoint;
                     playerAgent.enabled = false;
+                    transform.position = respawnPoint;
                     playerAgent.enabled = true;
-                    playerAgent.destination = finalDestination.position;
-                    
+                    playerAgent.SetDestination(finalDestination.position);
+                    playerRb.useGravity = false;
                 }
 
-
+                playerAgent.destination = finalDestination.position;
                 isPhysical = false;
                 knockbackCooldown = 0;
             }
@@ -70,37 +70,52 @@ public class AI_Movement : MonoBehaviour
 
 
 }
-
+    private void FixedUpdate()
+    {
+        
+    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Obs"))
         {
             transform.position = respawnPoint;
+            playerAgent.SetDestination(finalDestination.position);
 
         }
 
         if (other.gameObject.CompareTag("Finishline"))
         {
             playerAgent.isStopped = true;
+            animator.SetBool("idle", true);
 
         }
 
         if(other.gameObject.CompareTag("Donut"))
         {
-            
-             
+
+            playerRb.useGravity = true;
             isPhysical = true;
             if (other.gameObject.transform.parent.position.x < 0)
             {
-                playerRb.AddForce(900f, 0, 0, ForceMode.Force);
+                playerRb.AddForce(1200f, 0, 0, ForceMode.Force);
                 Debug.Log("oldu");
             }
             else
             {
-                playerRb.AddForce(-900f, 0, 0, ForceMode.Force);
+                playerRb.AddForce(-1200f, 0, 0, ForceMode.Force);
                 Debug.Log("oldu");
             }
             
+        }
+
+        if (other.gameObject.CompareTag("RotatorStick"))
+        {
+
+            playerAgent.enabled = false;
+            GetComponent<Rigidbody>().isKinematic = false;
+            isPhysical = true;
+            playerRb.AddForce(0, 0, 5f, ForceMode.Impulse);
+
         }
     }
 }

@@ -50,8 +50,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!136 &6874217464981881499
-CapsuleCollider:
+--- !u!65 &2691757543037697175
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -60,11 +60,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
-  m_Radius: 1.39
-  m_Height: 5.8
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!208 &8103303873437000515
+  serializedVersion: 2
+  m_Size: {x: 1.93, y: 3.82, z: 1.52}
+  m_Center: {x: 0, y: 0, z: -0.016373169}
+--- !u!208 &8543792019782046869
 NavMeshObstacle:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -74,12 +73,12 @@ NavMeshObstacle:
   m_Enabled: 1
   serializedVersion: 3
   m_Shape: 1
-  m_Extents: {x: 2.105, y: 2.562, z: 0.93200004}
-  m_MoveThreshold: 1
+  m_Extents: {x: 1.76, y: 2.562, z: 0.66}
+  m_MoveThreshold: 0.1
   m_Carve: 1
   m_CarveOnlyStationary: 0
   m_Center: {x: 0, y: 0, z: 0}
-  m_TimeToStationary: 0.1
+  m_TimeToStationary: 0.5
 --- !u!114 &1610103059993178569
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class SC_Cam : MonoBehaviour
 {
@@ -28,8 +26,8 @@ public class SC_Cam : MonoBehaviour
        
          
         Vector3 desiredPosition = _body.position + offset;
-        //Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothTime);
-        camRb.position = desiredPosition;
+        Vector3 smoothedPosition = Vector3.SmoothDamp(camRb.position, desiredPosition, ref velocity,damping);
+        camRb.position = smoothedPosition;
         // Define a target position above and behind the target transform
         //Vector3 targetPosition = target.TransformPoint(new Vector3(0, 5.51f, -4.16f));
         // Smoothly move the camera towards that target position

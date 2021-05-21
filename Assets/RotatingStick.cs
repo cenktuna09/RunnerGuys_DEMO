@@ -34,4 +34,12 @@ public class RotatingStick : MonoBehaviour
             //Debug.Log(forwardForce);
         }
     }
+
+    private void OnTriggerStay(Collider other)
+    {
+        if(other.gameObject.CompareTag("Enemy"))
+        {
+            other.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+        }
+    }
 }

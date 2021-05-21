@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PaintObject : MonoBehaviour
 {
@@ -11,10 +9,14 @@ public class PaintObject : MonoBehaviour
     private float mouseX;
     private float mouseY;
     public Material newMaterialRef;
-
+    public float painted = 0;
+    private GameObject wall;
     // Start is called before the first frame update
     void Start()
     {
+        wall = GameObject.Find("Wall");
+        
+        painted = 0;
         brushRb = transform.gameObject.GetComponent<Rigidbody>();
         
     }
@@ -65,7 +67,13 @@ public class PaintObject : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Paintable"))
         {
+            float objLength = wall.transform.GetChild(0).GetComponent<TextScript>().paintableObjects.Length;
             other.gameObject.GetComponent<Renderer>().material = newMaterialRef;
+            other.gameObject.GetComponent<Collider>().enabled = false;
+            painted += 1 / objLength * 100;
+
+                Debug.Log(painted);
+                Debug.Log(objLength);
         }
     }
 }

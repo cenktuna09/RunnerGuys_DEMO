@@ -23,25 +23,48 @@ public class Player_Controller : MonoBehaviour
     private bool rotateObsRight;
     private bool stickHit;
     private Animator animator;
+
+    public Vector3 relativePosition = new Vector3();
+    public Transform Player;  //Player Car 
+    public GameObject[] Target;  // AI cars
+    
+    public int currentPos;
     // Start is called before the first frame update
     void Start()
     {
-        UnityEditor.AI.NavMeshBuilder.BuildNavMesh();
+        Target = GameObject.FindGameObjectsWithTag("Enemy");
         transform.position = respawnPoint;
         mainCam = Camera.main;
-        speed = 7.5f;
+        speed = 9f;
         maxRotateSpeed = 5f;
         Application.targetFrameRate = 60;
         rb = transform.gameObject.GetComponent<Rigidbody>();
         animator = transform.gameObject.GetComponent<Animator>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
 
-        if (Input.GetMouseButtonDown(0))
+        int numberOfFrontCars = 0;
+        for (int i = 0; i < Target.Length; i++)
+        {
+
+            Vector3 relativePosition = transform.InverseTransformPoint(Target[i].transform.position);
+            // calculate relative pos of  player car and AI cars . where Target is AI cars. Drag and drop your AI cars in Target Transform.
+            if (relativePosition.z < 0)
+            {
+
+                Debug.Log("Front of AI ");
+                numberOfFrontCars++;
+                currentPos = Target.Length + 1 - numberOfFrontCars;
+            }
+            Debug.Log("Current Rank ::  " + (Target.Length + 1 - numberOfFrontCars));
+            
+        }
+
+            if (Input.GetMouseButtonDown(0))
         {
             mousePos = new Vector3 (0, 0, 0);
             
@@ -86,8 +109,6 @@ public class Player_Controller : MonoBehaviour
             //// GAME MOVEMENT MECHANIC ///
             StartCoroutine(PlayerMove());
             //// GAME MOVEMENT MECHANIC ///
-
-
         }
         else
         {
@@ -96,10 +117,8 @@ public class Player_Controller : MonoBehaviour
 
         if(rotateObsLeft == true)
         {
-
             rb.AddForce(-10f, 0, 0);
             rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxRotateSpeed);
-           
         }
         else
         {
@@ -153,10 +172,14 @@ public class Player_Controller : MonoBehaviour
             transform.gameObject.GetComponent<Player_Controller>().enabled = false;
             move = Vector3.zero;
             animator.SetBool("Walk", false);
-            // other.transform.GetChild(0).GetComponent<Paintable>().enabled = true;
+            
             var paintable = GameObject.Find("Brush");
             paintable.gameObject.GetComponent<BoxCollider>().enabled = true;
             paintable.gameObject.GetComponent<PaintObject>().enabled = true;
+            var wall = GameObject.Find("Wall");
+            var canvas = GameObject.Find("Canvas");
+            wall.transform.GetChild(0).GetComponent<TextScript>().enabled = true;
+            canvas.transform.GetChild(1).gameObject.SetActive(true);
 
         }
 
@@ -167,6 +190,13 @@ public class Player_Controller : MonoBehaviour
             transform.position = respawnPoint;
             move = Vector3.zero;
 
+        }
+
+        if(other.gameObject.CompareTag("FallCollider"))
+        {
+            mainCam.transform.position = new Vector3(respawnPoint.x, mainCam.transform.position.y, respawnPoint.z - 10f);
+            transform.position = respawnPoint;
+            move = Vector3.zero;
         }
     }
     IEnumerator PlayerMove()
