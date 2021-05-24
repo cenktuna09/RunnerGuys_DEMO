@@ -5,14 +5,21 @@ public class AI_Movement : MonoBehaviour
     public Transform finalDestination;
     private NavMeshAgent playerAgent;
     private Rigidbody playerRb;
+    private BoxCollider playerCollider;
     Vector3 respawnPoint;
     private bool isPhysical;
     private float knockbackCooldown = 0f;
-    private float knockbackTime = 1f;
+    private float knockbackTime = 1.5f;
     private Animator animator;
+    private bool isHit;
+    private float maxRotateSpeed = 25f;
+    private bool rotateLeft;
+    private bool rotateRight;
+
     // Start is called before the first frame update
     void Start()
     {
+        playerCollider = transform.gameObject.GetComponent<BoxCollider>();
         animator = transform.gameObject.GetComponent<Animator>();
         playerRb = GetComponent<Rigidbody>();
         respawnPoint = transform.position;   //new Vector3(transform.position.x, transform.position.y, transform.position.z);
@@ -27,25 +34,26 @@ public class AI_Movement : MonoBehaviour
         
         if (isPhysical == true)
         {
+            
             playerAgent.enabled = false;
             GetComponent<Rigidbody>().isKinematic = false;
             // Add the time since the last Update
             knockbackCooldown += Time.deltaTime;
             if (knockbackCooldown > knockbackTime)
             {
-                
-                playerAgent.enabled = true;
-                GetComponent<Rigidbody>().isKinematic = true;
-
                 if(playerAgent.isOnNavMesh == false)
                 {
-                    playerAgent.enabled = false;
+                    
                     transform.position = respawnPoint;
                     playerAgent.enabled = true;
                     playerAgent.SetDestination(finalDestination.position);
                     playerRb.useGravity = false;
                 }
 
+                playerAgent.enabled = true;
+                GetComponent<Rigidbody>().isKinematic = true;
+
+                playerCollider.isTrigger = true;
                 playerAgent.destination = finalDestination.position;
                 isPhysical = false;
                 knockbackCooldown = 0;
@@ -72,7 +80,28 @@ public class AI_Movement : MonoBehaviour
 }
     private void FixedUpdate()
     {
-        
+        if(isHit == true)
+        {
+            //playerRb.AddForce(0, 0, -100f,ForceMode.Force);
+            Debug.Log("VURDU");
+            isHit = false;
+        }
+
+        if(rotateLeft)
+        {
+            playerRb.isKinematic = false;
+            playerRb.AddForce(-150f, 0, 0);
+          //  playerRb.velocity = Vector3.ClampMagnitude(playerRb.velocity, 20f);
+          
+        }
+
+        if(rotateRight)
+        {
+            playerRb.isKinematic = false;
+            playerRb.AddForce(150f, 0, 0);
+          //  playerRb.velocity = Vector3.ClampMagnitude(playerRb.velocity, 20f);
+           
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -111,10 +140,46 @@ public class AI_Movement : MonoBehaviour
         if (other.gameObject.CompareTag("RotatorStick"))
         {
 
-            playerAgent.enabled = false;
+            playerCollider.isTrigger = false;
             GetComponent<Rigidbody>().isKinematic = false;
-            isPhysical = true;
-            playerRb.AddForce(0, 0, 5f, ForceMode.Impulse);
+            //playerAgent.enabled = true;
+            isHit = true;
+            //isPhysical = true;
+            
+            playerCollider.isTrigger = true;
+
+        }
+
+
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+
+        if (other.gameObject.CompareTag("RotateObsLeft"))
+        {
+            rotateLeft = true;
+
+        }
+        if (other.gameObject.CompareTag("RotateObsRight"))
+        {
+            rotateRight = true;
+           
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.CompareTag("RotateObsLeft"))
+        {
+            rotateLeft = false;
+            playerRb.isKinematic = true;
+
+        }
+        if (other.gameObject.CompareTag("RotateObsRight"))
+        {
+            rotateRight = false;
+            playerRb.isKinematic = true;
 
         }
     }

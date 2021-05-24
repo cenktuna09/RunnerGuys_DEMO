@@ -2,6 +2,7 @@
 
 public class PaintObject : MonoBehaviour
 {
+    private bool mainPlayerFinish;
     private Rigidbody brushRb;
     private Vector3 mousePos;
     private bool isClick;
@@ -11,11 +12,13 @@ public class PaintObject : MonoBehaviour
     public Material newMaterialRef;
     public float painted = 0;
     private GameObject wall;
+    private bool isPainted;
+
     // Start is called before the first frame update
     void Start()
     {
         wall = GameObject.Find("Wall");
-        
+        //mainPlayerFinish = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Controller>().isFinished;
         painted = 0;
         brushRb = transform.gameObject.GetComponent<Rigidbody>();
         
@@ -37,8 +40,6 @@ public class PaintObject : MonoBehaviour
             isClick = false;
             move = new Vector3(0, 0, 0);
         }
-
-        
     }
 
     private void FixedUpdate()
@@ -67,6 +68,7 @@ public class PaintObject : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Paintable"))
         {
+            isPainted = true;
             float objLength = wall.transform.GetChild(0).GetComponent<TextScript>().paintableObjects.Length;
             other.gameObject.GetComponent<Renderer>().material = newMaterialRef;
             other.gameObject.GetComponent<Collider>().enabled = false;

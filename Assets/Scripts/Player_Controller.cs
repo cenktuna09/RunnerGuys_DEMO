@@ -27,8 +27,13 @@ public class Player_Controller : MonoBehaviour
     public Vector3 relativePosition = new Vector3();
     public Transform Player;  //Player Car 
     public GameObject[] Target;  // AI cars
-    
+
+    private GameObject Brush;
+    private GameObject Wall;
+    private GameObject Canvas;
     public int currentPos;
+    private bool isFinished;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,7 +45,9 @@ public class Player_Controller : MonoBehaviour
         Application.targetFrameRate = 60;
         rb = transform.gameObject.GetComponent<Rigidbody>();
         animator = transform.gameObject.GetComponent<Animator>();
-
+        Brush = GameObject.FindGameObjectWithTag("Brush");
+        Wall = GameObject.FindGameObjectWithTag("Wall");
+        Canvas = GameObject.FindGameObjectWithTag("Canvas");
     }
 
     // Update is called once per frame
@@ -53,14 +60,14 @@ public class Player_Controller : MonoBehaviour
 
             Vector3 relativePosition = transform.InverseTransformPoint(Target[i].transform.position);
             // calculate relative pos of  player car and AI cars . where Target is AI cars. Drag and drop your AI cars in Target Transform.
-            if (relativePosition.z < 0)
+            if (relativePosition.z < 0 && isFinished == false)
             {
 
-                Debug.Log("Front of AI ");
+               // Debug.Log("Front of AI ");
                 numberOfFrontCars++;
                 currentPos = Target.Length + 1 - numberOfFrontCars;
             }
-            Debug.Log("Current Rank ::  " + (Target.Length + 1 - numberOfFrontCars));
+           // Debug.Log("Current Rank ::  " + (Target.Length + 1 - numberOfFrontCars));
             
         }
 
@@ -99,6 +106,12 @@ public class Player_Controller : MonoBehaviour
             animator.SetBool("Walk", false);
             mouseX = 0;
             mouseY = 0;
+        }
+
+        if(isFinished == true)
+        {
+            move = new Vector3(0, 0, 0);
+
         }
     }
 
@@ -169,17 +182,16 @@ public class Player_Controller : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Finishline"))
         {
-            transform.gameObject.GetComponent<Player_Controller>().enabled = false;
-            move = Vector3.zero;
+            isFinished = true;
             animator.SetBool("Walk", false);
-            
-            var paintable = GameObject.Find("Brush");
-            paintable.gameObject.GetComponent<BoxCollider>().enabled = true;
-            paintable.gameObject.GetComponent<PaintObject>().enabled = true;
-            var wall = GameObject.Find("Wall");
-            var canvas = GameObject.Find("Canvas");
-            wall.transform.GetChild(0).GetComponent<TextScript>().enabled = true;
-            canvas.transform.GetChild(1).gameObject.SetActive(true);
+            other.transform.GetChild(0).gameObject.SetActive(true);
+             // other.transform.GetChild(0).gameObject.GetComponent<BoxCollider>().enabled = true;
+             //other.transform.GetChild(0).gameObject.GetComponent<PaintObject>().enabled = true;
+             //   Brush.gameObject.GetComponent<BoxCollider>().enabled = true;
+             // Brush.gameObject.GetComponent<PaintObject>().enabled = true;
+
+             Wall.transform.GetChild(0).GetComponent<TextScript>().enabled = true;
+             Canvas.transform.GetChild(1).gameObject.SetActive(true);
 
         }
 
