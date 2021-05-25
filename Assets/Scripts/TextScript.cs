@@ -13,7 +13,7 @@ public class TextScript : MonoBehaviour
     void Start()
     {
         paintableObjects = GameObject.FindGameObjectsWithTag("Paintable");
-        Brush = GameObject.Find("Brush");
+        Brush = GameObject.FindGameObjectWithTag("Brush");
 
        
     }

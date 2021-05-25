@@ -13,15 +13,16 @@ public class PaintObject : MonoBehaviour
     public float painted = 0;
     private GameObject wall;
     private bool isPainted;
-
+    private GameObject Canvas;
+    private float wallCount;
     // Start is called before the first frame update
     void Start()
     {
-        wall = GameObject.Find("Wall");
-        //mainPlayerFinish = GameObject.FindGameObjectWithTag("Player").gameObject.GetComponent<Player_Controller>().isFinished;
+        wall = GameObject.FindGameObjectWithTag("Wall");
+        Canvas = GameObject.FindGameObjectWithTag("Canvas");
         painted = 0;
         brushRb = transform.gameObject.GetComponent<Rigidbody>();
-        
+        wallCount = wall.transform.GetChild(0).GetComponent<TextScript>().paintableObjects.Length;
     }
 
     // Update is called once per frame
@@ -40,6 +41,11 @@ public class PaintObject : MonoBehaviour
             isClick = false;
             move = new Vector3(0, 0, 0);
         }
+
+        if(isPainted)
+        {
+
+        }
     }
 
     private void FixedUpdate()
@@ -54,9 +60,9 @@ public class PaintObject : MonoBehaviour
 
             move = new Vector3(mouseX, mouseY, 0).normalized;
             var pos = transform.position;
-            pos.x = Mathf.Clamp(brushRb.position.x, -6, 6);
+            pos.x = Mathf.Clamp(brushRb.position.x, -6, 6.6f);
             pos.y = Mathf.Clamp(brushRb.position.y, 1, 6.5f);
-            brushRb.MovePosition(pos + move * Time.fixedDeltaTime * 10f);
+            brushRb.MovePosition(pos + move * 15 * Time.fixedDeltaTime);
         }
         else
         {
@@ -69,13 +75,10 @@ public class PaintObject : MonoBehaviour
         if(other.gameObject.CompareTag("Paintable"))
         {
             isPainted = true;
-            float objLength = wall.transform.GetChild(0).GetComponent<TextScript>().paintableObjects.Length;
+            
             other.gameObject.GetComponent<Renderer>().material = newMaterialRef;
             other.gameObject.GetComponent<Collider>().enabled = false;
-            painted += 1 / objLength * 100;
-
-                Debug.Log(painted);
-                Debug.Log(objLength);
+            painted += 1 / wallCount * 100;
         }
     }
 }

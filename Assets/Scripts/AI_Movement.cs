@@ -12,7 +12,6 @@ public class AI_Movement : MonoBehaviour
     private float knockbackTime = 1.5f;
     private Animator animator;
     private bool isHit;
-    private float maxRotateSpeed = 25f;
     private bool rotateLeft;
     private bool rotateRight;
 
@@ -62,18 +61,6 @@ public class AI_Movement : MonoBehaviour
             {
                 
             }
-
-            /*
-
-            Vector3 direction = transform.TransformDirection(finalDestination.position);
-            float distance = Vector3.Distance(finalDestination.position, transform.position);
-
-            if(distance > 0.1f)
-            {
-                Vector3 movement = transform.forward * Time.deltaTime * 1f;
-                playerAgent.Move(movement);
-            }
-            */
         }
 
 
@@ -142,6 +129,7 @@ public class AI_Movement : MonoBehaviour
 
             playerCollider.isTrigger = false;
             GetComponent<Rigidbody>().isKinematic = false;
+            other.gameObject.GetComponent<Rigidbody>().AddForce(0, 0, 0.5f, ForceMode.Impulse);
             //playerAgent.enabled = true;
             isHit = true;
             //isPhysical = true;

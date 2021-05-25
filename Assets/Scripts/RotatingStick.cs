@@ -13,7 +13,7 @@ public class RotatingStick : MonoBehaviour
     void Start()
     {
         stickRb = transform.gameObject.GetComponent<Rigidbody>();
-        m_EulerAngleVelocity = new Vector3(0, 100, 0);
+        m_EulerAngleVelocity = new Vector3(0, 150, 0);
     }
 
     // Update is called once per frame

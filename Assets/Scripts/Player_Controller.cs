@@ -7,26 +7,21 @@ public class Player_Controller : MonoBehaviour
     private bool isClick;
     private Rigidbody rb;
     private float speed;
-    private Vector2 mousePos;
+    private Vector3 mousePos;
     Vector3 respawnPoint;
     Camera mainCam;
     Vector3 move;
     float mouseX;
     float mouseY;
-    Vector2 XandY;
-    float speedX = 5f;
-    float speedY = 10f;
 
-    private bool rotateObs;
     private float maxRotateSpeed;
     private bool rotateObsLeft;
     private bool rotateObsRight;
-    private bool stickHit;
     private Animator animator;
 
     public Vector3 relativePosition = new Vector3();
-    public Transform Player;  //Player Car 
-    public GameObject[] Target;  // AI cars
+    public Transform Player;     
+    public GameObject[] Target;  
 
     private GameObject Brush;
     private GameObject Wall;
@@ -45,7 +40,6 @@ public class Player_Controller : MonoBehaviour
         Application.targetFrameRate = 60;
         rb = transform.gameObject.GetComponent<Rigidbody>();
         animator = transform.gameObject.GetComponent<Animator>();
-        Brush = GameObject.FindGameObjectWithTag("Brush");
         Wall = GameObject.FindGameObjectWithTag("Wall");
         Canvas = GameObject.FindGameObjectWithTag("Canvas");
     }
@@ -53,36 +47,32 @@ public class Player_Controller : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        // Top Left Position Ranking //
         int numberOfFrontCars = 0;
         for (int i = 0; i < Target.Length; i++)
         {
 
             Vector3 relativePosition = transform.InverseTransformPoint(Target[i].transform.position);
-            // calculate relative pos of  player car and AI cars . where Target is AI cars. Drag and drop your AI cars in Target Transform.
             if (relativePosition.z < 0 && isFinished == false)
             {
-
-               // Debug.Log("Front of AI ");
                 numberOfFrontCars++;
                 currentPos = Target.Length + 1 - numberOfFrontCars;
             }
-           // Debug.Log("Current Rank ::  " + (Target.Length + 1 - numberOfFrontCars));
             
         }
 
-            if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
-            mousePos = new Vector3 (0, 0, 0);
-            
+            mousePos = new Vector3(0, 0, 0);
+
             isClick = true;
-           
-            
         }
-       if(Input.GetMouseButtonUp(0))
+
+        if (Input.GetMouseButtonUp(0))
         {
             isClick = false;
         }
+
 
         if (isClick == true)
         {
@@ -146,7 +136,10 @@ public class Player_Controller : MonoBehaviour
         {
 
         }
-
+        if(isFinished)
+        {
+            move = new Vector3(0, 0, 0);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -182,16 +175,13 @@ public class Player_Controller : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Finishline"))
         {
+            StopAllCoroutines(); 
             isFinished = true;
             animator.SetBool("Walk", false);
-            other.transform.GetChild(0).gameObject.SetActive(true);
-             // other.transform.GetChild(0).gameObject.GetComponent<BoxCollider>().enabled = true;
-             //other.transform.GetChild(0).gameObject.GetComponent<PaintObject>().enabled = true;
-             //   Brush.gameObject.GetComponent<BoxCollider>().enabled = true;
-             // Brush.gameObject.GetComponent<PaintObject>().enabled = true;
 
-             Wall.transform.GetChild(0).GetComponent<TextScript>().enabled = true;
-             Canvas.transform.GetChild(1).gameObject.SetActive(true);
+            Wall.transform.GetChild(0).gameObject.SetActive(true); // Text Position
+            other.transform.GetChild(0).gameObject.SetActive(true); // Brush
+            Canvas.transform.GetChild(1).gameObject.SetActive(true); // Wall Painted Percentage
 
         }
 
@@ -213,8 +203,6 @@ public class Player_Controller : MonoBehaviour
     }
     IEnumerator PlayerMove()
     {
-        
-
         while (true)
         {
             rb.MovePosition(transform.position + move * speed * Time.fixedDeltaTime);
@@ -225,17 +213,5 @@ public class Player_Controller : MonoBehaviour
 
             yield return null;
         }
-
-        
     }
-
-    
-    public void detectClick()
-    {
-        if(Input.GetMouseButtonDown(0))
-        {
-
-        }
-    }
-
 }
