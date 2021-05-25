@@ -53,7 +53,7 @@ public class Player_Controller : MonoBehaviour
         {
 
             Vector3 relativePosition = transform.InverseTransformPoint(Target[i].transform.position);
-            if (relativePosition.z < 0 && isFinished == false)
+            if (relativePosition.z < 0)
             {
                 numberOfFrontCars++;
                 currentPos = Target.Length + 1 - numberOfFrontCars;
@@ -100,8 +100,11 @@ public class Player_Controller : MonoBehaviour
 
         if(isFinished == true)
         {
+            StopAllCoroutines();
             move = new Vector3(0, 0, 0);
-
+            rb.velocity = Vector3.zero;
+            Wall.transform.GetChild(0).gameObject.SetActive(true); // Text Position
+            Canvas.transform.GetChild(1).gameObject.SetActive(true); // Wall Painted Percentage
         }
     }
 
@@ -136,10 +139,6 @@ public class Player_Controller : MonoBehaviour
         {
 
         }
-        if(isFinished)
-        {
-            move = new Vector3(0, 0, 0);
-        }
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -153,7 +152,10 @@ public class Player_Controller : MonoBehaviour
         {
             rotateObsRight = true;
         }
-
+        if(collision.gameObject.CompareTag("RotatorStick"))
+        {
+            gameObject.GetComponent<Rigidbody>().AddForceAtPosition(transform.forward * 5, rb.position);
+        }
        
 
 
@@ -175,13 +177,12 @@ public class Player_Controller : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Finishline"))
         {
-            StopAllCoroutines(); 
             isFinished = true;
             animator.SetBool("Walk", false);
 
-            Wall.transform.GetChild(0).gameObject.SetActive(true); // Text Position
+            
             other.transform.GetChild(0).gameObject.SetActive(true); // Brush
-            Canvas.transform.GetChild(1).gameObject.SetActive(true); // Wall Painted Percentage
+            
 
         }
 
@@ -198,6 +199,7 @@ public class Player_Controller : MonoBehaviour
         {
             mainCam.transform.position = new Vector3(respawnPoint.x, mainCam.transform.position.y, respawnPoint.z - 10f);
             transform.position = respawnPoint;
+            rb.velocity = Vector3.zero;
             move = Vector3.zero;
         }
     }

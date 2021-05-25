@@ -130,7 +130,7 @@ public class AI_Movement : MonoBehaviour
 
             playerCollider.isTrigger = false;
             GetComponent<Rigidbody>().isKinematic = false;
-            other.gameObject.GetComponent<Rigidbody>().AddForce(0, 0, 0.5f, ForceMode.Impulse);
+            gameObject.GetComponent<Rigidbody>().AddForceAtPosition(transform.forward * 15, playerRb.position);
             //playerAgent.enabled = true;
             isHit = true;
             //isPhysical = true;

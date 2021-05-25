@@ -24,22 +24,16 @@ public class RotatingStick : MonoBehaviour
         stickRb.MoveRotation(stickRb.rotation * deltaRotation);
     }
 
-    private void OnCollisionStay(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.CompareTag("Player"))
-        {
 
-            collision.gameObject.GetComponent<Rigidbody>().AddForce(0,0,0.5f,ForceMode.Impulse);
-            
-            //Debug.Log(forwardForce);
-        }
     }
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerExit(Collider other)
     {
         if(other.gameObject.CompareTag("Enemy"))
         {
-            other.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+          //  other.gameObject.GetComponent<Rigidbody>().isKinematic = true;
         }
     }
 }

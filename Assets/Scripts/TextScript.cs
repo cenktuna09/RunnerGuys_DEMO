@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 public class TextScript : MonoBehaviour
 {
     
-    public Text text;
+    public TextMeshProUGUI text;
     public GameObject[] paintableObjects;
     float percentage;
     private GameObject Brush;
