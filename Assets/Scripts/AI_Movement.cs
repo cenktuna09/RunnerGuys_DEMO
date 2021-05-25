@@ -18,12 +18,13 @@ public class AI_Movement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        playerAgent = GetComponent<NavMeshAgent>();
+        playerAgent.SetDestination(finalDestination.position);
         playerCollider = transform.gameObject.GetComponent<BoxCollider>();
         animator = transform.gameObject.GetComponent<Animator>();
         playerRb = GetComponent<Rigidbody>();
         respawnPoint = transform.position;   //new Vector3(transform.position.x, transform.position.y, transform.position.z);
-        playerAgent = GetComponent<NavMeshAgent>();
-        playerAgent.SetDestination(finalDestination.position);
+        
 
     }
 
